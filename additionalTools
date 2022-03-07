@@ -1,0 +1,17 @@
+
+
+- snort : 
+- hollywood : make the screen look better :D
+- tor : tor browser
+- ibus-unikey: OKAY
+- Libreoffice
+- lshw:
+- sudo lshw -numeric -C display: list VGA
+- rcconf: GUI to config the rc file, Services to Bootup
+- python3-pip: python package manager
+- pip3: download modules from PyPI
+- wine, --add-architecture i386
+- mono-complete
+- wine wine32 wine64 winetricks winbind
+- mono on the website 7.0
+

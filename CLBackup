@@ -1,0 +1,182 @@
+BASIC COMMAND
+-ls : list (option : -la)
+-cd : change directory (trick : .. back , / root , ' ' home
+- | : pipe 
+- * any , [] include , ? include 1 character
+- pwd : present working directory
+- whoami : get user name 
+- --help : open help file 
+- man : open manual page
+
+
+SEARCHING
+- locate : location following is name
+- whereis : finding binaries 
+- which : finding binaries in the PATH Variable
+- find : powerfull searching (find / -type f -name apache2)
+- grep : filtering 
+
+
+
+MODIFYING FILES & DIRECTORY
+- cat : concatenate - create files 
+	+ command with redirect : '>' ex : cat > newfile
+	+ or append : '>>' ex: cat >> newfile
+- touch : create new file 
+- mkdir : make directory 
+- cp : copying a file - cp newfile /hackerDir/newfile2
+- mv : move or RENAME a file
+- rm : removing file
+- rmdir : removing directory - empty directory only
+- rm -r : removing directory and every file in there
+
+
+
+TEXT MANIPULATION
+- cat : viewing files
+- head : show 10 first line in files
+- tail : show last 10 line in files
+- nl : number lines : nl /etc/snort/snort.conf - show line of files
+- grep : filtering text : cat /etc/snort/snort.conf | grep output
+- sed : stream editor - find and replace ( like VIM editor ) - sed s/mysql/MySQL/g PATH > snort2.conf
+- more : viewing files by percent (%)
+- less : like more , but can fidding by "/something" , n to next , u to undo
+
+
+
+ETHERNET MANIPULATION
+- ifconfig : checking the eth0 : ethernet 0 , wlan0 : wireless 
+	lo : loopback ,...
+- iwconfig : checking wireless information
+- change the DNS -> /etc/resolv.conf
+- change the IP Addresss , networkMask , boardcastAddress
++ ex : ifconfig eth0 192.168.181.115 netmask 255.255.0.0 boardcast 192.168.1.255
+
+- spoofing MAC address : 
+	+ ifconfig eth0 down
+	+ ifconfig eth0 hw ether 00:11:22:33:44:55
+	+ ifconfig eth0 up
+	+ note : hw _ hardware , ether _ ethernet
+
+- dhclient eth0 : assigning new IP Addresses from DHCP Server
+- dig : gather DNS information _ dig hackers-arise.com
+	+ ns : nameserver
+	+ mx : mail exchange server
+- Mapping IP Addresss -> /etc/hosts files
+	+ ex : adding 192.168.181.131 bankofamerica.com
+
+
+INSTALL & UNINSTALL SOFTWARE
+- apt-get update : update list
+- apt-get upgrade : upgrade repository
+- apt-cache search : searching package
+- apt-get search : searching package
+- apt show : show the package information
+- apt-get install : install package ( software )
+- apt-get remove : remove but NOT CONFIGURATION files
+- apt-get purge : remove packge and confirguration files
+
+
+CONTROLLING FILE & DIR PERMISSION
+- drwxr--r--
+	+ d : directory ( file type )
+	+ rwx(1) : owner permission
+	+ r--(2)(3) : group & other user permission
+- root raekyo 
+	+ root : owner
+	+ raekyo : group
+- chown : change owner -> chown raekyo newfile
+- chgrp : change group -> chgrp security newIDS
+- chmod : change mode  -> chmod
+	+ rwx : 1 1 1 -> 4 2 1 -> 7
+	+ r-- : 1 0 0 -> 4 0 0 -> 4
+	+ ex : chmod 774 testFile
+- UGO syntax : 
+	+ u , g , o : user , group , other
+	+ - , + , = : remove , add set
+	+ ex : chmod u-w g+x o-r testFile
+- umask : unmask (default : file 666 , dir 777 , umask 022)
+	+ Resulting permission = default - umask
+	+ newfile ( 666 ) = 666 - 022 = 644 -> rw-r--r--
+	+ newDir  ( 777 ) = 777 - 022 - 755 -> rwxr-xr-x 
+	+ change umask -> /home/username/.profile -> add 007
+- SUID : set user ID (temp) -> chmod 4644 filename
+- SGID : set group ID (temp) -> chmod 2644 filename
+
+
+
+
+PROCESS MANAGEMENT
+- ps : process (switch : ps aux) -> filtering with grep
+	+ USER : the user who invoked the process
+	+ PIS : process ID
+	+ %CPU , %MEM : %CPU and %MEMORY
+	+ COMMAND : command name
+	+ ex : msfconsole (Metasploit exploitation framwork) 
+	-> ps aux | grep msfconsole
+- top : better way to checking process ( h , ? to open help page )
+
+- priority process management : from -20 to +19 adj by nice and renice
+- nice : set priority when starting a process (require : name process)
+	+ nice -n 10 /bin/slowps : decrease priority , resource
+	+ nice -n -10 /bin/slowps : increase priority , resouce
+
+- renice : changing the priority of runnign process (require : PID)
+	+ renice 20 6996 : 20 absolute value priority , 6996 : Slowps's pid
+	+ only root user can renice
+- kill : kill process by PID ( process id)
+	+ kill -1 PID : SIGHUP 1 -> stop and restarts
+	+ kill -9 PID : SIGKILL 9 -> absolute kill signal
+	+ -2 PID : SIGINT (Interupt _INT)-> interupt
+	+ -3 PID : SIGQUIT (core dump) -> terminate and save the ps info to file name core
+	+ -15 PID : SIGTERM (default  if don't use -signal) ->Terminate PS
+- killall : kill process by name
+	+ killall -9 zombieprocess
+- kill process by K + PID -> top to terminate the ps
+- RUNINNG PS IN THE BACKGROUND (don't need terminal) -> append ampersand &
+	+ leafpad newscript &
+- Moving PS from background to foreground -> fg
+	+ fg PID
+
+- at : scheduling the ps 
+	- at 7:20pm / am
+	- at noon / tomorrow / now
+	- at noon June 25 
+	- at now + 20 minutes / hours / days / weeks
+	- at 7:20pn 06/25/2019
+	- ex : at 7:20am
+	at > /root/myscanningscript
+
+
+
+USER ENVIRONMENT VARIABLE ( env )
+- env : environment variable _ list
+- set : view all Environment variable
+- VariableName = Value : set temporary variable value in that terminal
+- export : set variable's value permanent
+	+ save current state : echo $HISTSIZE > ~/valueofHISTSIZE.txt
+	+ change the value of variable : set > ~/newHISTSIZEvalue.txt
+	+ make it permanent : export HISTSIZE
+
+	+ undo ~/valueofHISTSIZE.txt 
+	+ export HISTSIZE
+
+SHELL PROMPT
+- username@hostname:current_directory
+	+ ex : raekyo@kali:current_directory
+- PS1=value : change the default display prompt shell
+	+ \u : the name of the current user
+	+ \h : the host name
+	+ \W : the base name of the current working directory
+	+ ex: PS1='L: #"
+
+- changing PATH :
+	+ echo $PATH ($PATH mean PATH's content)
+	+ adding PATH variable : PATH=$PATH:/root/newhackingtool 
+	+ each dir follow by colon (:)
+
+- User-Defined Variable : 
+	+ MYNEWVARIABLE="Hacking iz da bezt !"
+	+ echo $MYNEWVARIALE
+	+ delete variable : unset -> unset MYNEWVARIABLE
+	+ echo $MYNEWVARIABLE

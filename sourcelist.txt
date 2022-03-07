@@ -1,0 +1,7 @@
+
+hlzmel.fsmg.org.nz : ~1Mbs
+mirrors.dotsrc.org : ~1.5Mbs
+
+
+
+echo "deb http://mirror-1.truenetwork.ru/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list

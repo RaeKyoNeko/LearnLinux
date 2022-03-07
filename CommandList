@@ -1,0 +1,782 @@
+BASIC COMMAND
+-ls : list (option : -la)
+-cd : change directory (trick : .. back , / root , ' ' home
+- | : pipe 
+- * any , [] include , ? include 1 character
+- pwd : present working directory
+- whoami : get user name 
+- --help : open help file 
+- man : open manual page
+
+
+SEARCHING
+- locate : location following is name
+- whereis : finding binaries 
+- which : finding binaries in the PATH Variable
+- find : powerfull searching (find / -type f -name apache2)
+- grep : filtering 
+
+
+
+MODIFYING FILES & DIRECTORY
+- cat : concatenate - create files 
+	+ command with redirect : '>' ex : cat > newfile
+	+ or append : '>>' ex: cat >> newfile
+- touch : create new file 
+- mkdir : make directory 
+- cp : copying a file - cp newfile /hackerDir/newfile2
+- mv : move or RENAME a file
+- rm : removing file
+- rmdir : removing directory - empty directory only
+- rm -r : removing directory and every file in there
+
+
+
+TEXT MANIPULATION
+- cat : viewing files
+- head : show 10 first line in files
+- tail : show last 10 line in files
+- nl : number lines : nl /etc/snort/snort.conf - show line of files
+- grep : filtering text : cat /etc/snort/snort.conf | grep output
+- sed : stream editor - find and replace ( like VIM editor ) - sed s/mysql/MySQL/g PATH > snort2.conf
+- more : viewing files by percent (%)
+- less : like more , but can fidding by "/something" , n to next , u to undo
+
+
+
+ETHERNET MANIPULATION
+- ifconfig : checking the eth0 : ethernet 0 , wlan0 : wireless 
+	lo : loopback ,...
+- iwconfig : checking wireless information
+- change the DNS -> /etc/resolv.conf
+- change the IP Addresss , networkMask , boardcastAddress
++ ex : ifconfig eth0 192.168.181.115 netmask 255.255.0.0 boardcast 192.168.1.255
+
+- spoofing MAC address : 
+	+ ifconfig eth0 down
+	+ ifconfig eth0 hw ether 00:11:22:33:44:55
+	+ ifconfig eth0 up
+	+ note : hw _ hardware , ether _ ethernet
+
+- dhclient eth0 : assigning new IP Addresses from DHCP Server
+- DHCP : Dynamic Host Confirguration Protocol -> run daemon
+- daemon : a process that runs in the background - dhcp (dhcp daemon)
+- dig : gather DNS information _ dig hackers-arise.com
+	+ ns : nameserver
+	+ mx : mail exchange server
+- Mapping IP Addresss -> /etc/hosts files
+	+ ex : adding 192.168.181.131 bankofamerica.com
+
+
+INSTALL & UNINSTALL SOFTWARE
+- apt-get update : update list
+- apt-get upgrade : upgrade repository
+- apt-cache search : searching package
+- apt-get search : searching package
+- apt show : show the package information
+- apt-get install : install package ( software )
+- apt-get remove : remove but NOT CONFIGURATION files
+- apt-get purge : remove packge and confirguration files
+
+
+CONTROLLING FILE & DIR PERMISSION
+- drwxr--r--
+	+ d : directory ( file type )
+	+ rwx(1) : owner permission
+	+ r--(2)(3) : group & other user permission
+- root raekyo 
+	+ root : owner
+	+ raekyo : group
+- chown : change owner -> chown raekyo newfile
+- chgrp : change group -> chgrp security newIDS
+- chmod : change mode  -> chmod
+	+ rwx : 1 1 1 -> 4 2 1 -> 7
+	+ r-- : 1 0 0 -> 4 0 0 -> 4
+	+ ex : chmod 774 testFile
+- UGO syntax : 
+	+ u , g , o : user , group , other
+	+ - , + , = : remove , add set
+	+ ex : chmod u-w g+x o-r testFile
+- umask : unmask (default : file 666 , dir 777 , umask 022)
+	+ Resulting permission = default - umask
+	+ newfile ( 666 ) = 666 - 022 = 644 -> rw-r--r--
+	+ newDir  ( 777 ) = 777 - 022 - 755 -> rwxr-xr-x 
+	+ change umask -> /home/username/.profile -> add 007
+- SUID : set user ID (temp) -> chmod 4644 filename
+- SGID : set group ID (temp) -> chmod 2644 filename
+
+
+
+
+PROCESS MANAGEMENT
+- ps : process (switch : ps aux) -> filtering with grep
+	+ USER : the user who invoked the process
+	+ PID : process ID
+	+ %CPU , %MEM : %CPU and %MEMORY
+	+ COMMAND : command name
+	+ ex : msfconsole (Metasploit exploitation framework) 
+	-> ps aux | grep msfconsole
+- top : better way to checking process ( h , ? to open help page )
+
+- priority process management : from -20 to +19 adj by nice and renice
+- nice : set priority when starting a process (require : name process)
+	+ nice -n 10 /bin/slowps : decrease priority , resource
+	+ nice -n -10 /bin/slowps : increase priority , resouce
+
+- renice : changing the priority of running process (require : PID)
+	+ renice 20 6996 : 20 absolute value priority , 6996 : Slowps's pid
+	+ only root user can renice
+- kill : kill process by PID ( process id)
+	+ kill -1 PID : SIGHUP 1 -> stop and restarts
+	+ kill -9 PID : SIGKILL 9 -> absolute kill signal
+	+ -2 PID : SIGINT (Interupt _INT)-> interupt
+	+ -3 PID : SIGQUIT (core dump) -> terminate and save the ps info to file name core
+	+ -15 PID : SIGTERM (default  if don't use -signal) ->Terminate PS
+- killall : kill process by name
+	+ killall -9 zombieprocess
+- kill process by K + PID -> top to terminate the ps
+- RUNINNG PS IN THE BACKGROUND (don't need terminal) -> append ampersand &
+	+ leafpad newscript &
+- Moving PS from background to foreground -> fg
+	+ fg PID
+
+- at : scheduling the ps 
+	- at 7:20pm / am
+	- at noon / tomorrow / now
+	- at noon June 25 
+	- at now + 20 minutes / hours / days / weeks
+	- at 7:20pn 06/25/2019
+	- ex : at 7:20am
+	at > /root/myscanningscript
+
+
+
+USER ENVIRONMENT VARIABLE ( env )
+- env : environment variable _ list
+- set : view all Environment variable
+- VariableName = Value : set temporary variable value in that terminal
+- export : set variable's value permanent
+	+ save current state : echo $HISTSIZE > ~/valueofHISTSIZE.txt
+	+ change the value of variable : set > ~/newHISTSIZEvalue.txt
+	+ make it permanent : export HISTSIZE
+
+	+ undo ->  ~/valueofHISTSIZE.txt 
+	+ export HISTSIZE
+
+SHELL PROMPT
+- username@hostname:current_directory
+	+ ex : raekyo@kali:current_directory
+- PS1=value : change the default display prompt shell
+	+ \u : the name of the current user
+	+ \h : the host name
+	+ \W : the base name of the current working directory
+	+ ex: PS1='L: #"
+
+- changing PATH :
+	+ echo $PATH ($PATH mean PATH's content)
+	+ adding PATH variable : PATH=$PATH:/root/newhackingtool 
+	+ each dir follow by colon (:)
+
+- User-Defined Variable : 
+	+ MYNEWVARIABLE="Hacking iz da bezt !"
+	+ echo $MYNEWVARIALE
+	+ delete variable : unset -> unset MYNEWVARIABLE
+	+ echo $MYNEWVARIABLE
+
+
+
+BASIC SCRIPT LANGUAGE
+- #! /bin/bash -> use interpreter for this file
+- echo " " -> print out
+- read var  -> basic user input 
+- $var -> var variable's content | value
+- use cat for readding file the filtering by grep , get out information
+by use pipe (|)
+
+
+
+BASIC SCANING OPEN PORT by nmap
+- SYNTAX : nmap <type of scan><target IP><optionally, target port>
+	+ -sT : Scan TCP
+	+ -iL <server_inputfile> : scan by server in another file
+	+ -oG <filename> : output the result to nother file
+	+ -p <port> : scan for specific port
+
+	+ ex : nmap -sT 192.168.0.108 -p 80 > /dev/null -oG pcScan
+		_ /dev/null -> the file put in there will be disappear
+
+
+
+COMPRESSING & ARCHIVING (-> tarfile , archive , tarball )
+- compressing -> make file smaller , but lossless data
+- TARRING FILE : tar (tape archive) 
+- tar <option><arg> : create archived file (bigger than original sum)
+	+ -c : create
+	+ -t : list
+	+ -v : verbose output
+	+ -x : extract
+	+ -r : append to the end of archive
+	+ --usage = --help
+
+
+	+ ex : tar -cvf Test.tar test1 test2 test3
+	+ ex : tar -tf Test.tar
+	+ ex : tar -r test4 -f Test.tar
+	+ ex : tar -xf Test.tar
+ 
+
+
+- COMPRESSING FILES : 
+	+ gzip -> .tar.gz  or  .tgz ( mix )   -> gunzip : GNU unzipt
+	+ bzip2 -> .tar.bz2  (slow - smaller) -> bunzip2 
+	+ compress -> .tar.z (fast - larger)  -> uncompress
+
+- Bit-by-Bit or Physical Copies of Storage Device
+- dd : physical copies
+	+ noerror : continue copy even if error occur
+	+ bs : block size ( default 512 bytes ) mostly set as 4KB = 4096bytes
+	+ SYN : dd if=<inputfile> of=<outputfile>
+	+ ex : dd if=/dev/sdb of=/root/flashcopy
+	+ ex : dd if=/dev/sdb of=/root/flashcopy bs=4096 conv:noerror
+
+
+
+FILESYSTEM & STORAGE DEVICE MANAGEMENT
+	DEVICE DIRECTORY /dev
+- floppy drives -> fd0  (today is gone)
+- hard drives -> hda
+- Dvd drives -> sr0
+- old legacy hard drives use IDE or E-IDE interface -> hda
+
+- Newer Serial ATA (SATA) interface drives 
+& Small Computer System Interface (SCSI) hard drives -> sda
+	+ sd : SATA hard drives
+	+ a : first hard drives
+	+ 1 : first partition on that drive
+- drives slip up into section called partitions 
+
+- ex:
+	+ sda : first SATA hard drive
+	+ sdb : second ...
+	+ sdc , sdd -> third , fourth
+
+- fdisk -l : list all the partitions of all the drives
+- fdisk indicates that it is an HPFS/NTFS/ExFAT filesystem type
+	+ HPFS : High Performance File System
+	+ NTFS : New Technology File System
+	+ ExFAT : Extended File Allocation Table (not native to Linux)
+
+- -: file 
+  d: directory file
+  c: character device (mouse & keyboard)
+  b: block device (Hardrives & DvD ) sending data by Block
+  
+- lsblk : list block _ get basic information about each block device in /dev
+
+- 2 Significant mount point is : /mnt & /media
+	+ external USB devices (flash drives , external USB hardrives)->media
+	+ external hard drives -> /mnt
+
+	+ mount <file system> <mount point>
+	+ ex: mount /dev/sdb1 /mnt
+	+ ex: mount /dev/sdc1 /media
+	-> the filesystems that are mounted on a system are kept in file at  /etc/fstab (file system table)  -> read by system every boot up
+
+- umount <file system> -> unmount the devices
+
+- df : disk free _ basic information disk mounted on the device
+	+ df 
+	+ df <file system> : df /dev/sdb1
+
+- fsck : file system check _ check error & repair if posible , or else put 
+bad are into "bad blocks" table to mark it as bad
+	+ specific the filesystem type
+	+ must unmount before checking with fsck
+	+ umount /dev/sdb1
+	+ fsck -p /dev/sdb1
+
+
+
+
+THE LOGGING SYSTEM
+- linux use daemon called syslogd
+- syslog including rsyslog and syslog-ng
+- default kali use rsyslog
+
+- default rule (line 50_ rsyslog.conf_RULE section)
+	facility.priority		action
+
+	+ facility : the program (mail,kern,lpr) whose ms are BEING LOGGED
+	+ priority : what kind of ms to log for that program
+	+ action   : location where the log will be sent
+
+
+	+ facility 
+		- auth/authpriv : Security/authorization messages 
+		- cron : clock daemons
+		- daemon : other daemons
+		- kern : kernel messages
+		- lpr  : pritting system
+		- mail : mail system
+		- user : Generic user-level messages
+
+	+ priority ( lowest -> highest )
+		- debug - info - notice - warning - warn - error - err
+		- crit - alert - emerg - panic
+
+		- if specific priority -> system will log messages classified 		as it and higher
+		- codes have been deprecated should not be use
+			+ warning, warn, error, err, emerg, panic.
+
+	+ action
+		- filename & location where the logs should be sent
+		- default /var/log
+
+
+
+- logrotate.conf : period rotating log file -> /var/log 
+	+ /etc/logrotate.conf
+	+ man logrotate.conf
+
+REMOVING EVIDENCE
+- shred : delete the file and overide it serveral time -> hard to recover
+	+ default : overide 4 times 
+	+ "the more times the file is overwritten,
+		the harder it is to recover"
+
+	+ -f : change permission
+	+ -n : overwirte N times
+	+ ex : shred /var/log/auth.log.* 
+
+
+DISABLING SERVICES
+SYN : service <service name> start|stop|restart
+
+- server rsyslog stop : stop the logging daemon -> stop generating any log
+files until the service restarted
+- HTTP Web Server with the Apache Web Server 
+	+ service apache2 start
+	+ editing the index.html (/var/www/html/index.html)
+
+
+USING & ABUSING SERVICES
+APACHE : Apache Web Server : creating, managing, deloying web servers ,..
+OpenSSH: Connect to compromised remote systems
+MySQL  : use database behind database-driven web applications (for CMSs)
+PostgreSQL:
+XSS : cross-site scripting 
+DNS : Domain Name System
+Perl or PHP : scripting language -> develop web application
+LAMP : Linux Apache MySQL PHP | Perl -> develop & deloy web-based application
+WAMP : Window Apache MySQL PHP | Perl
+SSH  : Secure Shell -> connect securely to a terminal on a remote system
+access list : a list of users who can use this service
+Raspberry Pi : system or spying _ Raspberry Spy Pi
+Database : content confidential information (credit card number,...)
+GPl : general public licensed (MySQL is openSource & GPL)
+CMSs : content manegement systems (Joomla, Drupal, Ruby, Rails)
+SQL : Intepreted programming language -> interfacing with a database
+LAN : Local Area Network
+WAN : Wide Area Network
+DBMS : Database Management Systems
+
+
+
+
+
+-> setup web server (Apache) -> physically spy (OpenSSH) -> access data (MySQL) -> store hacking information (PostgreSQL)
+
+- managing service : service <service name> start|stop|restart
+
+
+MYSQL command
+- start mysql service -> mysql -u root -p
+	+ -u : user 
+	+ -p : password
+- select : retrieve data (table hold data want to view, columns within that table)
+- ex: SELECT user FROM table
+
+- union  : combine the results of two or more select operations 
+- insert : add new data 
+- update : modify existing data
+- delete : delete data
+- show databases : ..
+- use <database name> : connect to databases
+
+- ex: select user, password from customers where user='admin'
+- select user, host, password from mysql.user;
+- >update user set password = PASSWORD("hackers-arise") where user = 'root';
+	+ set new password for user 'root'
+
+ACCESSING A REMOTE DATABASE
+SYN : mysql -u <username> -p
+
+if include hostname or IP address -> mysql -u <username> -p 192.168.0.1
+
+
+USE POSTGRESQL TO STORE DB METASPLOIT
+- set up the database that Metasploit will store its information in
+
+- msfdb init : create db
+- su postgres : login to postgres as root 
+- createuser msf_user -P : create username msf_user
+- createdb --owner=msf_user hackers-arise-db : create the database and
+grant permission for msf_user name hackers-arise-db
+- exit : exit current postgres user
+
+- db_connect msf_user:password@127.0.0.1/hackers_arise_db
+	+ connect msfconsole to PostgreSQL database 
+	+ IP address : local host by default 127.0.0.1
+	+ hackers-arise-db : database
+- db_status : checking status 
+
+
+
+
+BECOME SECURE & ANONYMOUS -> how to navigate World Wide Web
+NSA : National Security Agency cataloging all our activities 
+ONR : the US Office of Naval Research -> Tor Project (Tor : The onion router)
+TOR : The onion router -> encrypt the data, destination, sender IP address of each packet -> each hop : information is encrypted then decrypted by the next hop ->each packet's information contain only the previous hop along the path m not the UP address of the origin
+
+TLD : Top-level domain (darkweb.onion)
+VPN : Virtual private network
+
+Method :
+	- The Onion Network
+	- Proxy servers
+	- Virtual private networks
+	- Private encrypted email
+
+How be tracked
+	- 1: your IP address identifies you as you traverse the internet 
+		-> Data sent from your machine is generally tagged with IP
+	- Google & other email services "read" your email, look for  keywords to more efficently serve you ads
+- traceroute : trace the route of packet to ID destination
+
+Proxy servers def: middlemen for traffic : the user connects to a proxy and the traffic is given the UP address of the proxy before it's passed on 
+
+- proxy chain -> use more than one proxy
+- proxychains <the command you want proxied> <arguments>
+	+ ex: proxychains nmap -sT -Pn <IP address>
+	+ -sS : stealth scan command
+	+ config file ; /etc/proxychains.conf
+	+ ProxyList -> Type IPaddress Port
+	+ ex: socks4 123.30.128.45 3128
+	+ ex: proxychains firefox ww.hackers-arise.com -> proxychains the browser
+- dynamic chaining option : if one of the proxies is down, it will skip to the next one 
+	+ path: /etc/proxychains.conf
+
+- random chaining option : randomly choose a set of UP addresses from our list and use them to create proxy chain (include dynamic concept)
+	+ path: /etc/proxychains.conf
+
+- Why don't use free proxy
+	-> "If something is free, you're not the customer;
+		-> You're the product."
+- use VPNs: list best and most popular commercial VPN services(according to CNET)
+	+ IP Vanish, Nord VPN, ExpressVPN, CyberVPN, CyberGhost, Golden Frog VPN
+	+ Hid My Ass (HMA(, Private Internet Access, PureVPN, TorGrard
+	+ Buffered VPN
+	+ $50-%100 per year _ 30-day free trial 
+	+ strength of VPN: traffic encrypted, protecting against snooping, IP
+	address is cokacked by the CPN UP address 
+	-> the owner VPN has your ORIGINATING UP address
+	-> VPNs that promise NOT to store or log any of this information
+- Encrypted Email: ProtonMail -> can't read your email(Switzerland)
+
+
+
+UNDERSTANDING & INSPECTING WIRELESS NETWORKS
+
+- AP (access point): the device wireless users connect to for internet access
+- ESSID (extended service set identifier): same as the SSID, but can be used for ultiple APs in a wireless LAN
+- BSSID (basic service set identifier): the unique identifier of each AP, same as the MAC address of the device.
+- SSID (service set identifier): the name of the network
+- Channels: Wi-Fi can operate on any one of 14 channels(1-14). In the United States, Wi-fi is limited to channels 1-11
+- Power: The closer you are to the Wi0Fi AP, the greater the power , and the easier the connection is to crack
+- Security: the security protocal used on the Wi-Fi AP that is being read from. There are three primary security protocols for Wi-Fi. The original, 'Wired Equivalent Provacy' (WEP), was badly flawed and easily cracked. Its replacement, 'Wi-Fi Protected Access'(WPA), was a bit more secure. Finally, WPA2-PSK, much more secure and uses a preshared key(PSK) that all users share, is now used by nearly all Wi-Fi APs (except enterprise Wi-Fi)
+- Modes: Wi-Fi can operate in one of three modes: managed, master, monitor.
+- Wirelesss range: In US, Wi-Fi AP must legally broadcat its signal at an upper limit of 0.5 watts.At this power, it has a normal rang of about 300 feet(100 meters). High-gain antennas can extend this range to as much as 20 miles.
+- Frequency: Wi-Fi designed to operate on 2.4GHz and 5GHz. Modern Wi-Fi APs and wireless network cards often use both
+- GUI : Graphical user interface
+
+
+BASIC WIRELESS COMMANDS
+
+- ifconfig: lists each activated network interface on you system along with some basic statistics, including(most importantly) the UP address of each interface.
+- iwconfig: lists wireless interfaces & key
+	+ wireless interfaces: network cards
+	+ Modes: 
+		* managed: ready to join or has joined an AP
+		* master:  ready to act as or already is an AP
+		* monitor: 
+- iwlist: see all the wireless access points
+	+ SYN: iwlist interface action
+		* ex: iwlist wlan0 scan
+- nmcli: (network manager command line interface): high-level interface for the network interfaces(influding the wireless ones) is known as the "network manager".
+	+ SYN: nmcli dev wifi : dev-> devices
+	+ SYN: nmcli dev wifi connect AP-SSID password APpassword
+	+ ex: nmcli dev wifi connect Hackers-Arise password 12345678
+
+
+WIFI Recon with aircrack-ng
+- requirement:
+	+ MAC address of the target AP (BSSID)
+	+ MAC address of a client
+	+ channel the AP is operating on
+	-> get get all by aircrack-ng
+
+- FIRST: put your wireless network card into monitor mode
+	+ airmon-ng start|stop|restart interface
+	+ ex: airmon-ng start wlan0
+		* airmon0ng rename your wireless interface: wlan0mon
+
+	+ airodump-ng: captures & displays the key data from broadcasting APs & any clients connected to those APs or within the vicinity
+		* SYN: airodump-ng interface
+		* BSSID: The MAC address of the AP or client
+		* PWR: The strength of the signal
+		* ENC: The encryption used to secure the transmission
+		* #Data: The data throughput rate
+		* CH: The channel the AP is operating on
+		* ESSID: The name of the AP
+		* ex: airodump-ng wlan0mon
+			. upper portion: BSSID, Power, how many beacon frames has 			been detected, the datat throughtput rate, how many packet			 have traversed the wireless card, the channel(1-14), the t			  heorectical throughput limit, the encryption protocol, the			   cliper used for encryption, the authentication type, ESSID
+			. lower portion: client is not associated, has been detec			ted
+	+ to crack the wireless AP: 
+		* client MAC address 
+		* the AP MAC address
+		* the channel the target is operating on
+		* password list
+	+ to crack Wi-Fi password
+		* open three terminal 
+		- airodump-ng -c 10 --bssid 01:01:AA:BB:CC:22 -w Hackers-ArisePSK wlan0mon : captures all the packets traversing the AP on tchannel 10 using -c option
+	
+		- aireplay-ng --deauth 100 -a 01:01:AA:BB:CC:22-c A0:A3:E2:44:7C:E5 wlan0mon : knock off (deauthenticate) anyone connected to the AP, force them to reauthenticate to the AP, When they reauthenticate, you can capture the hash of their password that is exchanged in the WPA2-PSK four-way handshake.
+	
+		- aircrack-ng -w wordlist.dic -b 01:01:AA:BB:CC:22 Hacker-ArisePSK.cap
+
+
+
+
+DETECTING & CONNECTING TO BLUETOOTH
+
+- "pairing": connect two Bluetooth devices, they can pair only if they are in discoverable mode, when in discoverable mode transmits the following information:
+	+ Name
+	+ Class
+	+ List of services
+	+ Technical information
+- SDP: Service Doscovery Protocol: Bluetooth protocol for searching for Bluetooth services,
+- BlueZ : scan for Bluetooth signals
+	+ hciconfig: operates similarly to ifconfig but for Bluetooth devices
+	+ hcitool: This inquiry tool can provide us with device name, device ID,
+device class, and device clock information, which enables the devices to
+work synchronously.
+	+ hcidump: This tool enables us to sniff the Bluetooth communication,
+meaning we can capture data sent over the Bluetooth signal.
+
+
+- Penetration testing Bluetooth:
+	+ hciconfig: get MAC address, name AP
+	+ hciconfig hci0 up: check that the connection is enabled
+	+ hcitool scan: scan for other Bluetool dev within range
+	+ hcitool dev: scan for dev
+	+ hcitool inq: inquiring
+	+ hcitool --help: help page for hcitool
+	+ sdptool browse MACaddress:
+	+ l2ping MACaddress: seeing whether the dev are reachable
+		+ ex: l2ping 90:32:4B:48:CA:20
+
+
+
+
+
+
+MANAGING THE LINUX KERNEL & LOADABLE KERNEL MODULES
+
+- kernel: the center of the os & controls everything the operating system does, including managing memory, controlling the CPU, and even controlling what the user sees on the screen 
+
+- "user land" _ and includes nearly everything else
+- kernel: can only be accessed by root or other privileged accounts
+
+- LKMs: loadable kernel modules: adding some modules to the kernel without going through the entire process(rebuild, compile, reboot entire kernel,...)
+- MITML: main-in-the middle attack: hacker places themselves between a client and server and can eavesdrop on or alter the communication.
+
+- Kernel Module:
+	+ central nervous system of OS
+	+ controlling everything it does, including interactions between hardware components and starting the neccessary services
+	+ "rootkit": embeds itself into the kernel of the os, often through these LKMs. If malware embeds itself in the kernel, the hacker can take complete control of the operating system 
+	+"if a hacker can successfully tempt a Linux admin into installing a
+video or other device driver that has a rootkit embedded in it, the hacker can
+take total control of the system and kernel. This is the way some of the most
+insidious rootkits take advantage of Linux and other operating systems."
+
+- Checking the Kernel Version:
+	+ uname -a: checking the distribution our OS
+		* 5.14.9-2: kernel build version
+		* x86_64: arichitecture
+		* SMP: symmtric multiprocessing capabilities
+		* file Path:cat /proc/version
+
+	+ sysctl: Ketnel tunning: change memory allocations, enable networking features, and even harden the kernel against outside attacks -> affect only until you reboot the system -> make changes permanet -> edit /etc/sysctl.conf'
+		* sysctl -a | less: 
+			. net.ipv4.ip_forward = 0:is the kernel parameter that enables the kernel to forward on the packets it receives. In other words, the packets it receives, it sends back out. The default setting is 0, which means that packet forwarding is disabled.
+			. sysctl -w net.ipv4.ipforward=1, to enable UP forwarding
+
+
+MANAGING KERNEL MODULES
+
+- insmod: insert module
+	+ lsmod: list the installed modules in the kernel
+	+ rmmod: remove module
+- modprobe: automatically loads dependencies and makes loading & removing kernel modeles less risky
+
+- modinfo bluetooth: finnding more information
+
+- modprobe <option> <module name>
+	+ add modules: modprobe -a <module name>
+	+ remove modules: modprobe -r <module to be removed>
+
+
+- dmesg: prints out the message buffer from kernel
+
+
+
+
+JOB SCHEDULING 
+
+- jobs: scripts or other tasks, want to run periodically.
+
+Scheduling tasks:
+- crond: cron daemon: deamon runs in the background, checks the cron table for which commands to run at specified times 
+
+- crontab: crontable: scheldule a task or job to execute regularly on a particualr day or date, at a particular time daily or every so many weeks or months
+
+TO SCHEDULING
+	- enter them into cron table file(/etc/crontab)
+		+ 1-5: schedule the time to run the task
+		+ 6: specifies the user
+		+ the absolute path to the command you want to execute
+			
+	- edit crontab with: option -e
+
+
+SCHEDULING A BACKUP TASK
+
+- DOW: day of week
+
+- crontab ex: 00 2 * * 0 <username> /bin/systembackup.sh
+- 	      00 2 15,30 * * <username> /root/systembackup.sh
+	      00 23 * * 1-5 backup /root/systembackup.sh
+	      00 2 * 6-8 0,6 user /usr/share/MySQLsscanner.sh
+
+Crontab shortcuts:
+
+@yearly
+@annually
+@monthly
+@weekly
+@daily
+@midnight <username> /usr/share/MySQLscanner.sh
+@noon
+@reboot
+
+
+rc Scripts to Run Jobs at Startup
+
+- rc scripts: a number of scripts are run to set up the environment
+	+ After the kernelhas initialized and loaded all its modules, the kernel starts a daemon known as init or init.d . This daemon then begins to run a number of scripts found in /etc/init.d/rc. These scripts include commands for starting many of the services necessary
+
+
+
+LINUX RUNLEVELS:
+
+- 0: Halt the system
+- 1: Single-user/minimal mode
+- 2-5: Multiuser modes
+- 6: Reboot the system
+
+
+ADDING SERVICES TO rc.d
+
+- update-rc.d: add/remove services for the re.d script to run at startup
+- SYN:update-rc.d <name of the script or service><remove|defaults|disable|enable>
+
+ADDING SERVICE via GUI
+
+- rcconf: setting the rc file via GUI
+
+
+
+
+PYTHON SCRIPTING BASICS 
+
+- "script kiddies": beginner who simply uses tools created by someone else
+- AV: antivirus
+- IDSs: intrusion detection systems
+- SET: Social-Engineer Toolkit
+- IPs: internet protocols
+- PyPI: the Python Package Index
+- pip : pip installs Packages
+
+- pip3 install <package name>: download modules from PyPI
+	+ Path: /usr/local//lib/<python-version>/dist-packages
+	+ pip3 show pysnmp: information about py lib
+- download a package directly from the site: unpack it ->
+	+ python setup.py install
+
+- wget: Third-Party Modules: download it from wherever it is being stored online,
+	+ ex: 
+wget http://xael.org/norman/python/python-nmap/python-nmap-0.3.4.tar.gz
+	-> tar -xzf python-nmap-0.3.4.tar.gz
+	-> >~/python-nmap-0.3.4 >python setup.py install
+
+
+PYTHON FUNCTION
+
+float() returns its argument as a floating-point number. For example,
+float(1) would return 1.0 .
+help() displays help on the object specified by its argument.
+int() returns the integer portion of its argument (truncates).
+len() returns the number of elements in a list or dictionary.
+max() returns the maximum value from its argument (a list).
+open() opens the file in the mode specified by its arguments.
+range() returns a list of integers between two values specified by its
+arguments.
+sorted() takes a list as an argument and returns it with its elements in
+order.
+type() returns the type of its argument (for example, int, file, method,
+function).
+
+Build TCP Client:
+	
+#! /usr/bin/python3
+➊ import socket
+➋ s = socket.socket()
+➌ s.connect(("192.168.1.101", 22))
+➍ answer = s.recv(1024)
+➎ print (answer)
+s.close
+
+
+Creating a TCP Listener
+
+import socket
+➊ TCP_IP = "192.168.181.190"
+TCP_PORT = 6996
+BUFFER_SIZE = 100
+➋ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+➌ s.bind((TCP_IP, TCP_PORT))
+➍ s.listen (1)
+➎ conn, addr = s.accept()
+print ('Connection address: ', addr )
+while 1:
+data=conn.recv(BUFFER_SIZE)
+if not data:break
+print ("Received data: ", data)
+conn.send(data) #echo
+conn.close
+
+
+
+Python dict: dict = {key1:value1, key2:value2, key3:value3...}
+
+
